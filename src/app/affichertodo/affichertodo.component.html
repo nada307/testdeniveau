@@ -1,0 +1,135 @@
+<p-toast></p-toast>
+<div class="pt-4">
+    <h2 class="p-m-0">Todo List </h2>
+    <div class="card">
+
+    <p-toolbar styleClass="p-mb-4" class="pt-4">
+        <!--  -->
+        <ng-template pTemplate="left">
+            <button pButton pRipple label="Ajout" icon="pi pi-plus" class="p-button-danger p-mr-2" [disabled]="for.invalid" (click)="openNew()"></button>
+        </ng-template>
+        <ng-template pTemplate="right">
+         
+
+
+        </ng-template>
+      </p-toolbar>
+
+      <p-table #dt [value]="tabs" [rows]="10" [paginator]="true" [globalFilterFields]="['titre','description','datededebut','datedecheance','status']" [rowHover]="true" dataKey="id" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+        <ng-template pTemplate="caption">
+            <div class="p-d-flex p-ai-center p-jc-between ">
+                <span class="p-input-icon-left ">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Rechercher..." />
+                </span>
+            </div>
+        </ng-template>
+      <ng-template pTemplate="header">
+          <tr>
+
+               
+             
+            <th pSortableColumn="titre">titre
+              <p-sortIcon field="titre"></p-sortIcon>
+          </th>
+          <th pSortableColumn="description">description
+            <p-sortIcon field="description"></p-sortIcon>
+        </th>
+        <th pSortableColumn="datededebut">datededebut
+          <p-sortIcon field="datededebut"></p-sortIcon>
+      </th>
+  
+  <th pSortableColumn="datedecheance">datedecheance
+  <p-sortIcon field="datedecheance"></p-sortIcon>
+  </th>
+  <th pSortableColumn="status">status
+  <p-sortIcon field="status"></p-sortIcon>
+  </th>
+<th>
+<i class="pi pi-angle-double-down" style="font-size: 2rem"></i>
+
+</th>  
+            </tr> 
+        </ng-template> 
+        <ng-template pTemplate="body" let-todo>
+            <tr>
+               
+              <td>{{todo.titre}}</td>
+              <td>{{todo.description}}</td>
+              <td>{{todo.datededebut}}</td>
+              <td>{{todo.datedecheance}}</td>
+              <td>{{todo.status}}</td>
+              <td><a class="btn btn-success" (click)="onEdit(todo)">
+                <div class="fa fa-fw fa-edit"></div> Modifier</a></td>
+                      
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                Au total, il y a {{tabs ? tabs.length : 0 }} des autorisations.
+            </div>
+        </ng-template>
+    </p-table>
+    <p-dialog [(visible)]="ajoutInf" [style]="{width: '800px'}" header="Ajout dim" [modal]="true" styleClass="p-fluid">
+
+
+      <app-todo *ngIf="ajoutInf==true" [form]=" for "></app-todo>
+    </p-dialog>
+
+
+  </div></div>
+
+  <p-dialog header="modifier todo " [(visible)]="display1" 
+  [style]="{width: '50vw'}" [baseZIndex]="10000">
+
+  <div class="container">
+    <div class="form-group">
+
+    
+        <div class="panel-body" >
+          <form *ngIf="!isSuccessful"
+           name="form"
+          (ngSubmit)="f.form.valid && onupdateprod(f.value)"
+          #f="ngForm"
+          novalidate>
+          
+          <div class="p-field p-col-12 p-md-6">
+            <label for="firstname6">Description</label>
+            <br>
+            <input  placeholder="description..." type="text" class="form-control">
+          </div>
+       
+          <div>
+            <label for="bday">datedecheance</label>
+            <br>
+            <input class="form-control" type="date"  class="form-control">
+    
+          </div> 
+   <div class="p-field p-col-12 p-md-6">
+            <label for="firstname6">Statues</label>
+            <br>
+            <select  (change)="selected()"
+            placeholder="status..."  class="form-control">
+            <option *ngFor="let cat of categories" [value]="cat.value"  >
+              {{cat.viewValue}}
+            </option>
+          </select>
+        
+          </div>
+          <button class="btn btn-success" type="submit" >update</button>
+
+      
+
+  
+    
+           <br> <br>
+          </form>
+        </div>
+
+          </div>
+        <div [style]="{width: '300px'}"  >
+          <br><br><br>
+    
+        </div>
+      </div>
+  </p-dialog>
